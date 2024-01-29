@@ -15,4 +15,5 @@ export const useTodoStore = defineStore("todoStore", {
       this.todos = this.todos.filter(todo => todo.id !== id)
     },
   },
+  persist: true,
 })
