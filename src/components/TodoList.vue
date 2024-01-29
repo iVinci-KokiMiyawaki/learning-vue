@@ -18,30 +18,24 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue"
+import { ref } from "vue"
+import { useTodoStore } from "../../stores/todoStore.js"
 
 export default {
-  name: "TodoList",
   setup() {
     const newTodo = ref("")
-    const todos = reactive([])
-    let nextId = 1
+    const store = useTodoStore()
 
     const addTodo = () => {
-      if (newTodo.value.trim()) {
-        todos.push({ id: nextId++, text: newTodo.value })
-        newTodo.value = ""
-      }
+      store.addTodo(newTodo.value)
+      newTodo.value = ""
     }
 
     const removeTodo = id => {
-      const index = todos.findIndex(todo => todo.id === id)
-      if (index !== -1) {
-        todos.splice(index, 1)
-      }
+      store.removeTodo(id)
     }
 
-    return { newTodo, todos, addTodo, removeTodo }
+    return { newTodo, addTodo, removeTodo, todos: store.todos }
   },
 }
 </script>
