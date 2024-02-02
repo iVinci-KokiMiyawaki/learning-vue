@@ -1,10 +1,14 @@
 <template>
-  <div id="app">
-    <h1>ToDoリスト</h1>
-    <todo-list></todo-list>
+  <div
+    id="app"
+    class="flex h-screen items-center justify-center bg-gray-100"
+  >
+    <div class="w-full max-w-xs">
+      <h1 class="mb-4 text-center text-2xl font-bold">ToDo List</h1>
+      <todo-list></todo-list>
+    </div>
   </div>
 </template>
-
 <script>
 import TodoList from "./components/TodoList.vue"
 

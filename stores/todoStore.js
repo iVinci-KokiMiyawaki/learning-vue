@@ -12,7 +12,10 @@ export const useTodoStore = defineStore("todoStore", {
       }
     },
     removeTodo(id) {
-      this.todos = this.todos.filter(todo => todo.id !== id)
+      const index = this.todos.findIndex(todo => todo.id === id)
+      if (index !== -1) {
+        this.todos.splice(index, 1)
+      }
     },
   },
   persist: true,
