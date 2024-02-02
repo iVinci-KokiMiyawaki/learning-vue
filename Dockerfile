@@ -15,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # アプリケーションを実行するためのポートを公開
-EXPOSE 8080
+EXPOSE 5173
 
 # アプリケーションを起動
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "dev"]
