@@ -1,11 +1,57 @@
 version: "3"
+
 services:
-  vue-app:
-    build: .
-    ports:
-      - "5173:5173"
-    volumes:
-      - .:/app
-      - /app/node_modules
+  # frontendの設定
+  frontend:
+    container_name: learning-vue
+    build:
+      context: .
+      dockerfile: ./docker/frontend.Dockerfile
     environment:
-      - NODE_ENV=development
+      # Reactのホットリロードを有効化するための設定
+      - WATCHPACK_POLLING=true
+    volumes:
+      # ルートディレクトリ配下をworkspace配下にマウントする
+      - .:/workspace:cached
+      # node_modulesは別ボリュームでマウントする
+      - frontend_node_modules:/workspace/frontend/node_modules
+    ports:
+      - "4444:4444"
+  # backendの設定
+  backend:
+    container_name: learning-node
+    build:
+      context: .
+      dockerfile: ./docker/backend.Dockerfile
+    tty: true
+    environment:
+      # nodemonでホットリロードを有効化するための設定
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      # ルートディレクトリ配下をworkspace配下にマウントする
+      - .:/workspace:cached
+      # node_modulesは別ボリュームでマウントする
+      - backend_node_modules:/workspace/backend/node_modules
+    ports:
+      - "5555:5555"
+  # dbの設定
+  db:
+    container_name: learning-mysql
+    image: mysql:8.0.28
+    platform: linux/x86_64
+    ports:
+      - "6666:6666"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: Asia/Tokyo
+    volumes:
+      # MySQLのデータをボリュームにマウントする
+      - db-store:/var/lib/mysql
+
+# ボリュームの設定、実行時に作ってくれる
+volumes:
+  frontend_node_modules:
+  backend_node_modules:
+  db-store:

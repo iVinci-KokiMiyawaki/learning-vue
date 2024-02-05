@@ -4,18 +4,23 @@ module.exports = {
     browser: true,
     node: true,
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:vue/vue3-recommended",
-    "prettier"
-  ],
+  extends: ["eslint:recommended", "prettier"],
+  plugins: ["import"],
   rules: {
-    // override/add rules settings here, such as:
-    // 'vue/no-unused-vars': 'error'
+    "import/order": [
+      "error",
+      {
+        groups: ["builtin", "external", "internal"],
+        "newlines-between": "always",
+        pathGroups: [
+          {
+            pattern: "@/**",
+            group: "internal",
+            position: "before",
+          },
+        ],
+      },
+    ],
   },
-  ignorePatterns: [
-    "static/titan/js/nhn-hls.js",
-    "static/camsdk/*.js",
-    "static/camsdk/*.wasm",
-  ]
+  ignorePatterns: ["static/**/*"],
 }

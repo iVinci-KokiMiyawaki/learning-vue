@@ -30,7 +30,8 @@
 
 <script>
 import { ref } from "vue"
-import { useTodoStore } from "../../stores/todoStore.js"
+
+import { useTodoStore } from "../stores/todoStore"
 
 export default {
   setup() {
