@@ -5,6 +5,7 @@ WORKDIR /workspace/backend
 COPY ../backend/ ./
 
 COPY package*.json ./
+
 RUN npm install
 
 # コンテナ起動時に実行するコマンド

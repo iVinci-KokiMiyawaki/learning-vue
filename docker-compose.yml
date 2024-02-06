@@ -17,6 +17,10 @@ services:
       - frontend_node_modules:/workspace/frontend/node_modules
     ports:
       - "4444:4444"
+    depends_on:
+      - backend
+    networks:
+      - app-network
   # backendの設定
   backend:
     container_name: learning-node
@@ -34,24 +38,31 @@ services:
       - backend_node_modules:/workspace/backend/node_modules
     ports:
       - "5555:5555"
+      - "7777:7777"
+    depends_on:
+      - db
+    networks:
+      - app-network
   # dbの設定
   db:
-    container_name: learning-mysql
-    image: mysql:8.0.28
-    platform: linux/x86_64
+    image: postgres:13
+    restart: always
+    container_name: integration-tests-prisma
     ports:
-      - "6666:6666"
+      - "5432:5432"
     environment:
-      MYSQL_ROOT_PASSWORD: mysql
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      TZ: Asia/Tokyo
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+      POSTGRES_DB: tests
     volumes:
-      # MySQLのデータをボリュームにマウントする
-      - db-store:/var/lib/mysql
-
-# ボリュームの設定、実行時に作ってくれる
+      - db-store:/var/lib/postgresql/data/
+    # ボリュームの設定、実行時に作ってくれる
+    networks:
+      - app-network
 volumes:
   frontend_node_modules:
   backend_node_modules:
   db-store:
+
+networks:
+  app-network:
