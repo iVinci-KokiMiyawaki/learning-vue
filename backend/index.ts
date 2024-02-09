@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 const app = express()
 
-app.get("/todos", async (req: Request, res: Response) => {
+app.get("/api/todos", async (req: Request, res: Response) => {
   try {
     const todos = await prisma.todo.findMany()
     res.json(todos)

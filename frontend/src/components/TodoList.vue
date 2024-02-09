@@ -15,7 +15,7 @@
         class="my-2 flex items-center justify-between"
       >
         <div class="mr-4 flex-grow rounded bg-gray-200 p-2">
-          {{ todo.text }}
+          {{ todo.title }}
         </div>
         <button
           class="rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 
 import { useTodoStore } from "../stores/todoStore"
 
@@ -46,6 +46,23 @@ export default {
     const removeTodo = id => {
       store.removeTodo(id)
     }
+
+    // データをフェッチする関数
+    const fetchTodos = async () => {
+      try {
+        const response = await fetch("api/todos") // ここにAPIのURLを入力
+        if (!response.ok) {
+          throw new Error("データの取得に失敗しました")
+        }
+        const data = await response.json()
+        store.setTodos(data) // フェッチしたデータをtodosに割り当
+      } catch (error) {
+        console.error("Fetch error:", error)
+      }
+    }
+
+    // コンポーネントがマウントされた時にデータをフェッチ
+    onMounted(fetchTodos)
 
     return { newTodo, addTodo, removeTodo, todos: store.todos }
   },

@@ -8,7 +8,12 @@ export const useTodoStore = defineStore("todoStore", {
   actions: {
     addTodo(text) {
       if (text.trim()) {
-        this.todos.push({ id: this.nextId++, text })
+        this.todos.push({
+          title: text,
+          description: "", // ここに適切な初期値を設定
+          status: "pending", // または他の適切な初期ステータス
+          // その他必要なフィールド
+        })
       }
     },
     removeTodo(id) {
@@ -16,6 +21,9 @@ export const useTodoStore = defineStore("todoStore", {
       if (index !== -1) {
         this.todos.splice(index, 1)
       }
+    },
+    setTodos(fetchedTodos) {
+      this.todos = fetchedTodos
     },
   },
   persist: true,
