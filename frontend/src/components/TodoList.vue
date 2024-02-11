@@ -10,7 +10,7 @@
     </div>
     <ul>
       <li
-        v-for="todo in todos"
+        v-for="todo in store.todos"
         :key="todo.id"
         class="my-2 flex items-center justify-between"
       >
@@ -28,45 +28,26 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted } from "vue"
 
 import { useTodoStore } from "../stores/todoStore"
 
-export default {
-  setup() {
-    const newTodo = ref("")
-    const store = useTodoStore()
+const newTodo = ref("")
+const store = useTodoStore()
 
-    const addTodo = () => {
-      store.addTodo(newTodo.value)
-      newTodo.value = ""
-    }
-
-    const removeTodo = id => {
-      store.removeTodo(id)
-    }
-
-    // データをフェッチする関数
-    const fetchTodos = async () => {
-      try {
-        const response = await fetch("api/todos") // ここにAPIのURLを入力
-        if (!response.ok) {
-          throw new Error("データの取得に失敗しました")
-        }
-        const data = await response.json()
-        store.setTodos(data) // フェッチしたデータをtodosに割り当
-      } catch (error) {
-        console.error("Fetch error:", error)
-      }
-    }
-
-    // コンポーネントがマウントされた時にデータをフェッチ
-    onMounted(fetchTodos)
-
-    return { newTodo, addTodo, removeTodo, todos: store.todos }
-  },
+const addTodo = () => {
+  store.createTodo(newTodo.value)
+  newTodo.value = ""
 }
+
+const removeTodo = id => {
+  store.removeTodo(id)
+}
+
+onMounted(async () => {
+  await store.fetchTodos()
+})
 </script>
 
 <style>
