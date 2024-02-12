@@ -13,6 +13,8 @@ services:
     volumes:
       # ルートディレクトリ配下をworkspace配下にマウントする
       - .:/workspace:cached
+      # frontendディレクトリをworkspace/frontendにマウントする
+      - ./frontend:/workspace/frontend
       # node_modulesは別ボリュームでマウントする
       - frontend_node_modules:/workspace/frontend/node_modules
     ports:
@@ -34,6 +36,8 @@ services:
     volumes:
       # ルートディレクトリ配下をworkspace配下にマウントする
       - .:/workspace:cached
+      # backendディレクトリをworkspace/backendにマウントする
+      - ./backend:/workspace/backend
       # node_modulesは別ボリュームでマウントする
       - backend_node_modules:/workspace/backend/node_modules
     ports:
@@ -47,13 +51,13 @@ services:
   db:
     image: postgres:13
     restart: always
-    container_name: integration-tests-prisma
+    container_name: learning-postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: tests
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     volumes:
       - db-store:/var/lib/postgresql/data/
     # ボリュームの設定、実行時に作ってくれる
