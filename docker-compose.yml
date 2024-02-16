@@ -42,27 +42,9 @@ services:
       - backend_node_modules:/workspace/backend/node_modules
     ports:
       - "5555:5555"
-      - "7777:7777"
-    depends_on:
-      - db
     networks:
       - app-network
-  # dbの設定
-  db:
-    image: postgres:13
-    restart: always
-    container_name: learning-postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    volumes:
-      - db-store:/var/lib/postgresql/data/
-    # ボリュームの設定、実行時に作ってくれる
-    networks:
-      - app-network
+      - supabase_network_backend
 volumes:
   frontend_node_modules:
   backend_node_modules:
@@ -70,3 +52,5 @@ volumes:
 
 networks:
   app-network:
+  supabase_network_backend:
+    external: true
