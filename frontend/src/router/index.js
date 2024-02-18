@@ -8,9 +8,9 @@ import { supabase } from "../libs/supabase"
 
 // ルート定義
 const routes = [
-  { path: "/", component: HomeView },
-  { path: "/login", component: LoginView },
-  { path: "/todos", component: TodoView },
+  { path: "/", component: HomeView, meta: { title: "Home" } },
+  { path: "/login", component: LoginView, meta: { title: "Login" } },
+  { path: "/todos", component: TodoView, meta: { title: "ToDo" } },
 ]
 
 // ルーターインスタンスの作成
@@ -24,9 +24,7 @@ router.beforeEach(async (to, from, next) => {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // ログインしていない場合はログインページにリダイレクトする
-  // ログイン済みの場合にloginページにアクセスした場合はホームページにリダイレクトする
-  if (to.path !== "/login" && !user) {
+  if (to.path === "/todos" && !user) {
     next("/login")
   } else if (to.path === "/login" && user) {
     next("/")

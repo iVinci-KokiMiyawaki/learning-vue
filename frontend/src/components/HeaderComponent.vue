@@ -1,7 +1,7 @@
 <template>
   <header class="bg-gray-800 p-4 text-white">
     <nav class="container mx-auto flex justify-between">
-      <h1 class="text-xl">My App</h1>
+      <h1 class="text-xl">{{ currentRouteTitle }}</h1>
       <div>
         <router-link
           to="/"
@@ -25,13 +25,15 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue"
-import { useRouter } from "vue-router"
+import { computed, onMounted } from "vue"
+import { useRoute, useRouter } from "vue-router"
 
 import { useAuth } from "../composables/useAuth"
 
 const { user, checkUser, signOut } = useAuth()
 const router = useRouter()
+const route = useRoute()
+const currentRouteTitle = computed(() => route.meta.title || "My App")
 
 onMounted(checkUser)
 
