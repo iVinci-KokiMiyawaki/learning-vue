@@ -24,10 +24,11 @@ model Todo {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  name      String  @db.VarChar(100)
-  email     String  @db.VarChar(100) @unique
-  todos     Todo[]
+  id         Int     @id @default(autoincrement())
+  supabaseId String  @unique @default(uuid())
+  name       String  @db.VarChar(100)
+  email      String  @db.VarChar(100) @unique
+  todos      Todo[]
 
   @@map("users")
 }

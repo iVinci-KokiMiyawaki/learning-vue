@@ -1,5 +1,7 @@
 import { defineStore } from "pinia"
 
+import { supabase } from "../libs/supabase"
+
 export const useTodoStore = defineStore("todoStore", {
   state: () => ({
     todos: [],
@@ -7,7 +9,15 @@ export const useTodoStore = defineStore("todoStore", {
   actions: {
     async fetchTodos() {
       try {
-        const response = await fetch("/api/todos")
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        const token = session.access_token
+        const response = await fetch("/api/todos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         if (!response.ok) {
           throw new Error("データの取得に失敗しました")
         }
@@ -19,15 +29,20 @@ export const useTodoStore = defineStore("todoStore", {
     async createTodo(text) {
       if (text.trim()) {
         try {
+          const {
+            data: { session },
+          } = await supabase.auth.getSession()
+          const token = session.access_token
           const response = await fetch("/api/todos", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               title: text,
               description: "",
-              userId: 1,
+              userId: session.user.id,
             }),
           })
           if (!response.ok) {
@@ -42,8 +57,15 @@ export const useTodoStore = defineStore("todoStore", {
     },
     async removeTodo(id) {
       try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
+        const token = session.access_token
         const response = await fetch(`/api/todos/${id}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
         if (!response.ok) {
           throw new Error("ToDoの削除に失敗しました")

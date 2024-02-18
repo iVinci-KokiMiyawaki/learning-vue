@@ -7,7 +7,7 @@
   </div>
 </template>
 <script setup>
-import TodoList from "../components/TodoList.vue"
+import TodoList from "../components/TodoListComponent.vue"
 </script>
 
 <style>

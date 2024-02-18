@@ -4,13 +4,15 @@ import { PrismaClient } from "@prisma/client"
 const router = express.Router()
 const prisma = new PrismaClient()
 
-router.get("/:userId/todos", async (req: Request, res: Response) => {
+router.post("/sync-user", async (req: Request, res: Response) => {
+  const { supabaseId, email, name } = req.body
   try {
-    const userId = parseInt(req.params.userId)
-    const todos = await prisma.todo.findMany({
-      where: { userId },
+    const user = await prisma.user.upsert({
+      where: { supabaseId },
+      update: { email, name },
+      create: { supabaseId, email, name },
     })
-    res.json(todos)
+    res.json(user)
   } catch (error) {
     res.status(500).json({ error: "Internal server error" })
   }
