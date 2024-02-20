@@ -7,16 +7,9 @@ services:
     build:
       context: .
       dockerfile: ./docker/frontend.Dockerfile
-    environment:
-      # Reactのホットリロードを有効化するための設定
-      - WATCHPACK_POLLING=true
     volumes:
-      # ルートディレクトリ配下をworkspace配下にマウントする
-      - .:/workspace:cached
-      # frontendディレクトリをworkspace/frontendにマウントする
-      - ./frontend:/workspace/frontend
-      # node_modulesは別ボリュームでマウントする
-      - frontend_node_modules:/workspace/frontend/node_modules
+      - ./frontend:/home/node/app:cached
+      - frontend_node_modules:/home/node/app/node_modules
     ports:
       - "4444:4444"
     depends_on:
@@ -34,12 +27,8 @@ services:
       # nodemonでホットリロードを有効化するための設定
       - CHOKIDAR_USEPOLLING=true
     volumes:
-      # ルートディレクトリ配下をworkspace配下にマウントする
-      - .:/workspace:cached
-      # backendディレクトリをworkspace/backendにマウントする
-      - ./backend:/workspace/backend
-      # node_modulesは別ボリュームでマウントする
-      - backend_node_modules:/workspace/backend/node_modules
+      - ./backend:/home/node/app:cached
+      - backend_node_modules:/home/node/app/node_modules
     ports:
       - "5555:5555"
     networks:
